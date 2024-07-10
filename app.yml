@@ -19,11 +19,12 @@ default_events:
   # - create
   # - delete
   # - deployment
+  - deployment_review
   # - deployment_status
   # - fork
   # - gollum
   # - issue_comment
-  - issues
+  # - issues
 # - label
 # - milestone
 # - member
@@ -52,13 +53,17 @@ default_events:
 # the value (for example, write).
 # Valid values are `read`, `write`, and `none`
 default_permissions:
+  # Workflows, workflow runs and artifacts.
+  # https://developer.github.com/v3/apps/permissions/#permission-on-pull-requests
+  actions: read
+
   # Repository creation, deletion, settings, teams, and collaborators.
   # https://developer.github.com/v3/apps/permissions/#permission-on-administration
   # administration: read
 
   # Checks on code.
   # https://developer.github.com/v3/apps/permissions/#permission-on-checks
-  # checks: read
+  checks: read
 
   # Repository contents, commits, branches, downloads, releases, and merges.
   # https://developer.github.com/v3/apps/permissions/#permission-on-contents
@@ -66,11 +71,11 @@ default_permissions:
 
   # Deployments and deployment statuses.
   # https://developer.github.com/v3/apps/permissions/#permission-on-deployments
-  # deployments: read
+  deployments: read
 
   # Issues and related comments, assignees, labels, and milestones.
   # https://developer.github.com/v3/apps/permissions/#permission-on-issues
-  issues: write
+  # issues: write
 
   # Search repositories, list collaborators, and access repository metadata.
   # https://developer.github.com/v3/apps/permissions/#metadata-permissions
@@ -102,7 +107,7 @@ default_permissions:
 
   # Organization members and teams.
   # https://developer.github.com/v3/apps/permissions/#permission-on-members
-  # members: read
+  members: read
 
   # View and manage users blocked by the organization.
   # https://developer.github.com/v3/apps/permissions/#permission-on-organization-user-blocking

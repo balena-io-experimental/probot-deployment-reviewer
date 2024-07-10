@@ -12,17 +12,18 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { describe, beforeEach, afterEach, test, expect } from "vitest";
 
-const issueCreatedBody = { body: "Thanks for opening this issue!" };
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const privateKey = fs.readFileSync(
   path.join(__dirname, "fixtures/mock-cert.pem"),
-  "utf-8",
+  "utf-8"
 );
 
 const payload = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "fixtures/issues.opened.json"), "utf-8"),
+  fs.readFileSync(
+    path.join(__dirname, "fixtures/deployment_review.requested.json"),
+    "utf-8"
+  )
 );
 
 describe("My Probot app", () => {
@@ -43,27 +44,43 @@ describe("My Probot app", () => {
     probot.load(myProbotApp);
   });
 
-  test("creates a comment when an issue is opened", async () => {
+  test("approves the review if the author is a reviewer", async () => {
     const mock = nock("https://api.github.com")
-      // Test that we correctly return a test token
+      // Intercept the request to get the installation token
       .post("/app/installations/2/access_tokens")
       .reply(200, {
         token: "test",
         permissions: {
-          issues: "write",
+          checks: "read",
+          deployments: "read",
+          members: "read",
         },
       })
 
-      // Test that a comment is posted
-      .post("/repos/hiimbex/testing-things/issues/1/comments", (body: any) => {
-        expect(body).toMatchObject(issueCreatedBody);
-        return true;
+      // Intercept the request to check the user's team membership
+      .get("/orgs/test-org/teams/test-team/memberships/test-user")
+      .reply(200, { state: "active" })
+
+      // Intercept the request to get environment information (if needed)
+      .get("/repos/test-org/test-repo/environments/test-environment")
+      .reply(200, {
+        id: 2,
+      })
+
+      // Intercept the request to approve the deployment review
+      .post("/repos/test-org/test-repo/actions/runs/1/pending_deployments", {
+        environment_ids: [2],
+        state: "approved",
+        comment: "👍 Automatically approved by Probot Deployment Reviewer",
       })
       .reply(200);
 
-    // Receive a webhook event
-    await probot.receive({ name: "issues", payload });
+    await probot.receive({
+      name: "deployment_review",
+      payload,
+    });
 
+    // expect(nock.isDone()).toBe(true);
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 

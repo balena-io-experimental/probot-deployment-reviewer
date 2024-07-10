@@ -30,4 +30,4 @@ For more, check out the [Contributing Guide](CONTRIBUTING.md).
 
 ## License
 
-[Apache-2.0](LICENSE) © 2024 Balena Inc. <hello@balena.io>
+[Apache-2.0](LICENSE) © 2024 Balena Inc.
