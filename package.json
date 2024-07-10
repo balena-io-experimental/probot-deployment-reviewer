@@ -1,11 +1,18 @@
 {
   "name": "probot-deployment-reviewer",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "private": true,
   "description": "A Probot app that automatically approves deployments for authorized reviewers",
-  "author": "Kyle Harding",
-  "license": "ISC",
-  "homepage": "https://github.com//",
+  "author": "Balena Inc. <hello@balena.io>",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/product-os/probot-deployment-reviewer#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/product-os/probot-deployment-reviewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/product-os/probot-deployment-reviewer/issues"
+  },
   "keywords": [
     "probot",
     "github",
